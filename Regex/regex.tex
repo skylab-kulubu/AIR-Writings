@@ -1,0 +1,210 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\date{}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=green,
+}
+\usepackage{diagbox}
+\usepackage{apacite}
+\usepackage[T1]{fontenc}
+%\usepackage[ansinew]{inputenc}
+
+\usepackage[top=0.5in, bottom=1in, left=1.10in, right=1.10in]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\DeclareRobustCommand{\bbone}{\text{\usefont{U}{bbold}{m}{n}1}}
+\DeclareMathOperator{\EX}{\mathbb{E}}
+
+
+\begin{document}
+
+\title{\centerline{\rule{13cm}{2pt}} \textbf{Regular Expressions\\ And\\ Its Applications}\\\centerline{\rule{13cm}{0.4pt}}}
+\author{
+  \textsc{BILICI, M. Şafak}\\
+  \textsc{safakk.bilici.2112@gmail.com}\\
+  \textsc{Yıldız Technical University}}
+\maketitle
+\begin{abstract}
+In this paper, we will examine Regular Expressions, also known as RegEx or RegExp, and show some practical results detailed.
+\end{abstract}
+
+\section{Introduction}
+\hspace*{1cm} A regular expression (shortened as regex or regexp; also referred to as rational expression) is a sequence of characters that define a search pattern. Usually such patterns are used by string-searching algorithms for 'find' or 'find and replace' operations on strings.  It is a technique developed in theoretical computer science and formal language theory [\href{http://fuuu.be/polytech/INFOF408/Introduction-To-The-Theory-Of-Computation-Michael-Sipser.pdf}{1}]. Regular expressions are used in search engines, search and replace dialogs of word processors and text editors, in text processing utilities such as sed and AWK and in lexical analysis. Many programming languages provide regex capabilities either built-in or via libraries.\\
+Regex is one of unheard success in standardization in computer science, it is a language for specifying text search strings. This practical language is used in every computer language, word processor, and text processing tools like the \texttt{grep}, \texttt{tr} [\href{https://github.com/safakkbilici/lingSH}{2}] or Emacs. Formally, a regular expresison is a algebraic notation for characterizing a set of strings. 
+
+\section{History}
+\hspace*{1cm} Regular expressions originated in 1951, when mathematician Stephen Cole Kleene described regular languages using his mathematical notation called regular events. These arose in theoretical computer science, in the subfields of automata theory (models of computation) and the description and classification of formal languages. Other early implementations of pattern matching include the SNOBOL language, which did not use regular expressions, but instead its own pattern matching constructs. \\
+Regular expressions entered popular use from 1968 in two uses: pattern matching in a text editor and lexical analysis in a compiler. Among the first appearances of regular expressions in program form was when Ken Thompson built Kleene's notation into the editor QED as a means to match patterns in text files.
+\\ He later added this capability to the Unix editor ed, which eventually led to the popular search tool grep's use of regular expressions ("grep" is a word derived from the command for regular expression searching in the ed editor: g/re/p meaning "Global search for Regular Expression and Print matching lines")\\
+In the 1980s the more complicated regexes arose in Perl, which originally derived from a regex library written by Henry Spencer.\\
+Today, regexes are widely supported in programming languages, text processing programs, advanced text editors, and some other programs. Regex support is part of the standard library of many programming languages, including Java and Python, and is built into the syntax of others.
+
+\section*{Diving Into Regular Expression Patterns}
+\hspace*{1cm} The simplest kind of regular expression is a sequence of simple character/characters	. To search \textit{safak}, we type \texttt{/safak/}. The expression \texttt{/safak/} matches any string containing the substring \textit{safak}.
+\renewcommand{\arraystretch}{1.5}
+\begin{center}
+\begin{tabular}{ |p{4cm}|p{10cm}| }
+ \hline
+ \hline
+ \textbf{RE}& \hspace*{0.6cm}\textbf{Matched} \\
+ \hline
+ \hline
+ \texttt{/safak/}   & "\underline{safak}'s teaching characteristics are boring"  \\
+ \hline
+ \texttt{/a/}     & "s\underline{a}f\underline{a}k \underline{a}nd s\underline{a}di \underline{a}re best friends"          \\
+ \hline
+ \texttt{/!/}      & "Sky Lab AI is the best \underline{!}"        \\
+ \hline
+ \hline
+\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+Regular expressions are case sensitive; lower case \texttt{/s/} is distinct from upper case \texttt{/S/}. This means that the pattern \texttt{/safak/} will not match the string \textit{Safak}. We can solve this problem with the use of square braces [ and ]. The string of characters inside the braces specifies \textbf{disjunction} of characters to match.
+\renewcommand{\arraystretch}{1.5}
+\begin{center}
+\begin{tabular}{ |p{4cm}|p{10cm}| }
+ \hline
+ \hline
+ \textbf{RE}& \hspace*{0.6cm}\textbf{Matched} \\
+ \hline
+ \hline
+ \texttt{/[Ss]afak/}   & "\underline{safak}'s teaching characteristics are boring. \underline{Safak} sucks"  \\
+ \hline
+ \texttt{/[abc]/}     & "s\underline{a}f\underline{a}k \underline{a}nd s\underline{a}di \underline{a}re \underline{b}est friends \underline{c}."          \\
+ \hline
+ \texttt{/[0123456789]/}      & "I have \underline{2} kinds and \underline{} husband."        \\
+ \hline
+ \hline
+\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+You can cleary see that it is too long to define the whole letters in a braces or even whole numbers. We can define the \textbf{range} with (-) character. The pattern \texttt{/[2-5]/} specifies any one of the characters 2, 3, 4, or 5. The pattern \texttt{/[A-Za-z]/} matches the whole letters in english including upper cased letters. 
+\\
+The square braces can also be used to specify what a single character \textbf{cannot} be, by use of the caret  (\string^). If the caret \string^ is the first symbol after the open square brace [, the resulting pattern is \textbf{negated}. 
+\renewcommand{\arraystretch}{1.5}
+\begin{center}
+\begin{tabular}{ |p{4cm}|p{10cm}| }
+ \hline
+ \hline
+ \textbf{RE}& \hspace*{0.6cm}\textbf{Matched} \\
+ \hline
+ \hline
+ \texttt{/[\string^A-Z]/}   & not an upper case  \\
+ \hline
+ \texttt{/[\string^Ss]/}     & neither "S" nor "s"    \\
+ \hline
+ \texttt{/[\string^.]/}      & not a period        \\
+ \hline
+ \texttt{/[e\string^]/} & either "e" or "\string^"\\
+ \hline \texttt{/a\string^b/} & the pattern 'a\string^b'\\
+ \hline
+ \hline
+\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+ \pagebreak
+ How can we talk about optional elements, like an optional \textit{s} in \textit{researcher} and \textit{researchers}? We can't use the square brackets, because they allow us to say "s or S1, not "s or nothing". For this we use the question mark (?), which \textbf{the predecing character or nothing}. We can think of the question mark as meaning \textbf{zero or one instances of the previous character}.
+ \renewcommand{\arraystretch}{1.5}
+\begin{center}
+\begin{tabular}{ |p{4cm}|p{10cm}| }
+ \hline
+ \hline
+ \textbf{RE}& \hspace*{0.6cm}\textbf{Matched} \\
+ \hline
+ \hline
+ \texttt{/researchers?/}   & researcher or researchers  \\
+ \hline
+ \texttt{/colou?r/}     & color or colour    \\
+ \hline
+ \hline
+\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+But there is still a problem about "how many of something we want" which is very important in regular expressions. For example we want to match with patterns like
+\begin{itemize}
+\item[$\rightarrow$] yy!
+\item[$\rightarrow$] yeey!
+\item[$\rightarrow$] yeeeeeeey!
+\item[$\rightarrow$] yeeeeeeeeeeeeeeeey!
+\item[$\rightarrow$] ...
+\end{itemize}
+A type of regex operator called \textbf{Kleene Star (*)} can do this sequential string matching. So, the expression \texttt{/e*/} means \textbf{any string of zero or more \textit{e}'s}. And the regular expressions for matching one or more \textit{e} is \texttt{/ee*/}, meaning one \textit{e} followed by zero or more \textit{e}'s. But sometimes it is annoying to have to write the regular expression for digits twice, so there are another operator called \textbf{Kleene Plus (+)} to represent this type of matching. It means \textbf{one or more ocurrences of the immediately preceding character or regular expression}. So \texttt{/ye+y!/} matches all strings above except the \textit{yy!}.\\\\
+One very important special characteris the period (/./), a \textbf{wildcard} expression that matches any single character 
+\renewcommand{\arraystretch}{1.5}
+\begin{center}
+\begin{tabular}{ |p{4cm}|p{10cm}| }
+ \hline
+ \hline
+ \textbf{RE}& \hspace*{0.6cm}\textbf{Matched} \\
+ \hline
+ \hline
+ \texttt{/beg.n/}   & "\underline{begin}, \underline{began}, \underline{begun}, \underline{beg'n} ..."  \\
+ \hline
+\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+The wildcard is often used with Kleene star to mean "any string of characters". For example to find any line which a particular word, for example, \textit{aardvark}, appears twice. We can specify this with \texttt{/aardvark.*aardvark/}.\\\\
+
+\textbf{Anchors} are special characters that anchor regular expressions to particular places in a string. The most common anchors are the caret \string^ and the dollar sign \$. The caret \string^ matches the start of a line. The pattern \texttt{/\string^The/} matches the word \textit{The} only at the start of a line. The dollar sign \$ matches the end of a line. So the pattern \textvisiblespace\$ is a useful pattern for mathing a space at the end of a line and the \texttt{/\string^The dog\.\$/} matches a line that contains only the phrase "\textit{The dog.}" (\. means only the character dot).\\
+There are also two other anchors; \textbf{\textbackslash b} matches a word-boundary, \textbf{\textbackslash B} matches non-word-boundary. 
+\renewcommand{\arraystretch}{1.5}
+\begin{center}
+\begin{tabular}{ |p{4cm}|p{10cm}| }
+ \hline
+ \hline
+ \textbf{RE}& \hspace*{0.6cm}\textbf{Matched} \\
+ \hline
+ \hline
+ \texttt{/\string^[\string^A-Za-z]/}   & \underline{"}Hello"  \\
+ \hline
+ \texttt{/\textbackslash .\$/}   & "The end\underline{.}"  \\
+ \hline
+ \texttt{/.\$/}   & "The end\underline{.} The end\underline{?}"  \\
+ \hline
+  \hline
+\end{tabular}
+\end{center}
+\renewcommand{\arraystretch}{1}
+Suppose we need to search for texts about pets; perhaps we are particularly interested
+in cats and dogs. In such a case, we might want to search for either the string cat or
+the string dog. Since we can’t use the square brackets to search for “cat or dog” (why
+disjunction can’t we say \texttt{/[catdog]/}, we need a new operator, the \textbf{disjunction} operator, also called the \textbf{pipe} symbol (|). The pattern \texttt{/cat|dog/} matches either string cat or dog.
+\\\\
+But there is a problem.  How can I specify both guppy and guppies? We cannot simply
+say \texttt{/guppy|ies/}, because that would match only the strings \textit{guppy} and \textit{ies}.
+To make the disjunction operator apply only to a specific pattern, we need to use the
+parenthesis operators (and). Enclosing a pattern in parentheses makes it act like
+a single character for the purposes of neighboring operators like the pipe | and the
+Kleene*. So the pattern \texttt{/gupp(y|ies)/} would specify that we meant the disjunction only to apply to the suffixes \textit{y} and \textit{ies}.\\There is also quantifiers like \texttt{/\{3,5\}/} that means 3, 4, or 5.
+
+\section*{An Application}
+\hspace*{1cm} Suppose that you want to build an application to help a user to buy a computer on the web. The user might want "any machine with at least 6 GHz and 500 GB of disk space for less than \$1000". Let's build a regex. First let's start with regular expression for prices\\\\
+\texttt{/\textbackslash \$[1-9]+[0-9]*/}\\\\
+This can specifies prices. But prices can be type of float. We need to define floating point.\\\\
+\texttt{/\textbackslash \$[1-9]+[0-9]*(\.[0-9]*)?\textbackslash b/}\\\\
+can do that. One last catch, this pattern also matches prices like \$19999999.99999 which is too expensive, let's add quantifier.\\\\
+\texttt{/\textbackslash \$[1-9][0-9]\{0,2\}(\.[0-9]*)?\textbackslash b/}\\\\
+Now let's define disk spaces with quantifier.\\\\
+\texttt{/\textbackslash \$[1-9][0-9]\{0,2\}\textbackslash b(\textbackslash .[0-9]*)?\textvisiblespace[1-4][0-9]\{0,2\}(GB|\textvisiblespace[Gg]igabytes)/}
+
+\section*{References}
+\begin{itemize}
+\item[-] https://lse-my472.github.io/week08/regular-expressions-cheat-sheet-v2.pdf
+\item[-] Speech and Language Processing - Daniel Jurafsky, James H. Martin
+\end{itemize}
+
+\end{document}
